@@ -95,7 +95,7 @@ services:
       ADAPTIVE_AUTO_ANNOTATION: 'false'
       NUMPROCS: 2
       CVAT_ANALYTICS: 1
-      CVAT_BASE_URL:
+      CVAT_BASE_URL: https://${CVAT_HOST}
       ONE_RUNNING_JOB_IN_QUEUE_PER_USER:
     command: init run server
     labels:
@@ -277,8 +277,8 @@ services:
     container_name: traefik
     restart: always
     ports:
-      - 8080:8080
-      - 8090:8090
+      - 8080
+      - 8090
     environment:
       CVAT_HOST: ${CVAT_HOST:-localhost}
       DJANGO_LOG_VIEWER_HOST: grafana
