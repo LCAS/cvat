@@ -97,6 +97,7 @@ services:
       CVAT_ANALYTICS: 1
       #CVAT_BASE_URL: https://${CVAT_HOST}
       CVAT_HOST: ${CVAT_HOST:-localhost}
+      CVAT_SHARE_URL: 'Mounted from Nextcloud'
       ONE_RUNNING_JOB_IN_QUEUE_PER_USER:
     command: init run server
     labels:
@@ -109,6 +110,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       cvat:
         aliases:
@@ -128,6 +131,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -144,6 +149,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -160,6 +167,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -176,6 +185,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -192,6 +203,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -208,6 +221,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -224,6 +239,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -240,6 +257,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -256,6 +275,8 @@ services:
       - cvat_data:/home/django/data
       - cvat_keys:/home/django/keys
       - cvat_logs:/home/django/logs
+      - cvat_share:/home/django/share:ro
+
     networks:
       - cvat
 
@@ -426,6 +447,10 @@ volumes:
   cvat_inmem_db:
   cvat_events_db:
   cvat_cache_db:
+  cvat_share:
+    external: true
+    name: nextcloud_mhanheide
+
 
 networks:
   cvat:

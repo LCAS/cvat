@@ -1,0 +1,84 @@
+# Copyright (C) 2018-2022 Intel Corporation
+# Copyright (C) CVAT.ai Corporation
+#
+# SPDX-License-Identifier: MIT
+
+name: cvat
+
+services:
+  cvat_zrok:
+    image: openziti/zrok
+    restart: unless-stopped
+    user: "${UID}"
+    volumes:
+      - ${HOME}/.zrok:/.zrok
+    environment:
+        HOME: /
+        PFXLOG_NO_JSON: "true"
+    command: share reserved "cvat" --headless --override-endpoint http://traefik:8080
+    networks:
+      - cvat
+    links:
+      - traefik
+    depends_on:
+      - traefik
+
+  cvat_server:
+    image: local/cvat
+    build:
+      context: .
+      args:
+        http_proxy:
+        https_proxy:
+        socks_proxy:
+        CLAM_AV:
+        CVAT_DEBUG_ENABLED:
+        COVERAGE_PROCESS_START:
+    environment:
+      CVAT_SERVERLESS: 1
+      CSRF_TRUSTED_ORIGINS: '["https://cvat.zrok.lcas.group", "http://cvat.zrok.lcas.group"]'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  cvat_ui:
+    image: local/cvat-ui
+    build:
+      context: .
+      args:
+        http_proxy:
+        https_proxy:
+        no_proxy:
+        socks_proxy:
+      dockerfile: Dockerfile.ui
+
+  nuclio:
+    container_name: nuclio
+    image: quay.io/nuclio/dashboard:1.13.0-amd64
+    restart: always
+    networks:
+      - cvat
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      http_proxy:
+      https_proxy:
+      no_proxy: ${no_proxy:-}
+      NUCLIO_CHECK_FUNCTION_CONTAINERS_HEALTHINESS: 'true'
+      NUCLIO_DASHBOARD_DEFAULT_FUNCTION_MOUNT_MODE: 'volume'
+    ports:
+      - '8077:8070'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 100m
+        max-file: "3"
+
+
+  cvat_worker_annotation:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+
+  traefik:
+    ports: []
