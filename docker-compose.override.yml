@@ -23,6 +23,21 @@ services:
     depends_on:
       - traefik
 
+  cvat_export_zrok:
+    image: openziti/zrok
+    restart: unless-stopped
+    user: "${UID}"
+    volumes:
+      - ${HOME}/.zrok:/.zrok
+      - cvat_data:/data
+    environment:
+        HOME: /
+        PFXLOG_NO_JSON: "true"
+    command: share reserved "cvatdownload" --headless
+    networks:
+      - cvat
+
+
   cvat_server:
     image: local/cvat
     build:
