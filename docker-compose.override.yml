@@ -40,6 +40,7 @@ services:
 
   cvat_server:
     image: local/cvat
+    restart: unless-stopped
     build:
       context: .
       args:
@@ -57,6 +58,7 @@ services:
 
   cvat_ui:
     image: local/cvat-ui
+    restart: unless-stopped
     build:
       context: .
       args:
@@ -69,7 +71,7 @@ services:
   nuclio:
     container_name: nuclio
     image: quay.io/nuclio/dashboard:1.13.0-amd64
-    restart: always
+    restart: unless-stopped
     networks:
       - cvat
     volumes:
@@ -90,10 +92,12 @@ services:
 
 
   cvat_worker_annotation:
+    restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
 
 
   traefik:
+    restart: unless-stopped
     ports: []
