@@ -782,3 +782,7 @@ LOGO_FILENAME = 'logo.svg'
 ABOUT_INFO = {
     "subtitle": "Open Data Annotation Platform",
 }
+
+HEALTH_CHECK = {
+    "DISK_USAGE_MAX": 99
+}

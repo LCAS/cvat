@@ -99,7 +99,7 @@ services:
       CVAT_HOST: ${CVAT_HOST:-localhost}
       CVAT_SHARE_URL: 'Mounted from Nextcloud'
       ONE_RUNNING_JOB_IN_QUEUE_PER_USER:
-    command: init run server
+    entrypoint: sh -c "echo 'HEALTH_CHECK = {\"DISK_USAGE_MAX\":99}' >> /home/django/cvat/settings/base.py && exec ./backend_entrypoint.sh init run server"
     labels:
       - traefik.enable=true
       - traefik.http.services.cvat.loadbalancer.server.port=8080
